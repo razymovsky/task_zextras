@@ -40,7 +40,9 @@ public class AuthMechanism$ZimbraAuth extends AuthMechanism {
             AuthListener.invokeOnException(afse);
             throw afse;
         }
+	// Проверяет, начинается ли userPassword с SSHA или SSHA512
         if (isEncodedPassword(encodedPassword)) {
+	    //Сравнивает хэш с паролем (через PasswordUtil)
             if (isValidEncodedPassword(encodedPassword, password)) {
                 return;
             }
@@ -57,6 +59,7 @@ public class AuthMechanism$ZimbraAuth extends AuthMechanism {
             return;
         }
         if (acct instanceof LdapEntry) {
+	    // Прямой LDAP bind к slapd
             prov.zimbraLdapAuthenticate(acct, password, authCtxt);
         } else {
             AccountServiceException.AuthFailedServiceException afse2 = AccountServiceException.AuthFailedServiceException.AUTH_FAILED(acct.getName(), namePassedIn(authCtxt));
